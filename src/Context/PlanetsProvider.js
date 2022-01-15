@@ -4,6 +4,7 @@ import PlanetsContext from './PlanetsContext';
 
 const PlanetsProvider = ({ children }) => {
   const [planets, setPlanets] = useState([]);
+  const [intermediario, setIntermediario] = useState([]);
   const [filterByName, setFilter] = useState({ name: '' });
   const [numberFilter, setNumberFilter] = useState({});
   const [initialValue, setInitialValue] = useState(0);
@@ -14,12 +15,14 @@ const PlanetsProvider = ({ children }) => {
     async function API() {
       const { results } = await fetch(url).then((response) => response.json());
       setPlanets(results);
+      setIntermediario(results);
     }
     API();
   }, []);
 
   useEffect(() => {
     if (filterByNumber.filterByNumericValues.length !== 0) {
+      setPlanets(intermediario);
       filterByNumber.filterByNumericValues.map((param) => {
         const { comparison, value, column } = param;
         switch (comparison) {
@@ -43,6 +46,8 @@ const PlanetsProvider = ({ children }) => {
           return 0;
         }
       });
+    } else {
+      setPlanets(intermediario);
     }
   }, [filterByNumber]);
 
@@ -82,6 +87,7 @@ const PlanetsProvider = ({ children }) => {
     filterByName,
     initialValue,
     filterByNumber,
+    setParameters,
   };
 
   return (

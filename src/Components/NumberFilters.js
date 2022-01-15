@@ -5,7 +5,8 @@ const NumberFilter = () => {
   const { handleClick,
     handleChangeSelect,
     initialValue,
-    filterByNumber } = useContext(PlanetsContext);
+    filterByNumber,
+    setParameters } = useContext(PlanetsContext);
   const valueFilter = ['maior que', 'igual a', 'menor que'];
   const initialColumFilter = ['population',
     'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
@@ -17,7 +18,15 @@ const NumberFilter = () => {
         .map((param) => columFilter.filter((fil) => fil !== param.column));
       setColumFilter(arrayParameters[0]);
     }
+    console.log(filterByNumber);
   }, [filterByNumber]);
+
+  const handleRemoveClick = ({ target }) => {
+    const att = filterByNumber.filterByNumericValues
+      .filter((element) => element.column !== target.value);
+    setParameters({ filterByNumericValues: att });
+  };
+
   return (
     <div>
       <form method="get">
@@ -75,11 +84,23 @@ const NumberFilter = () => {
       <section>
         {
           filterByNumber.filterByNumericValues.map((filters, i) => (
-            <p
-              key={ i }
-            >
-              {`${filters.column} ${filters.comparison} ${filters.value}`}
-            </p>
+            <div key={ i }>
+              <span
+                key={ i }
+              >
+                {`${filters.column} ${filters.comparison} ${filters.value}`}
+              </span>
+              <button
+                key={ i }
+                value={ filters.column }
+                data-testid="filter"
+                type="button"
+                onClick={ (event) => handleRemoveClick(event) }
+              >
+                X
+
+              </button>
+            </div>
           ))
         }
       </section>
