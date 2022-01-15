@@ -84,7 +84,10 @@ const NumberFilter = () => {
       <section>
         {
           filterByNumber.filterByNumericValues.map((filters, i) => (
-            <div key={ i }>
+            <div
+              key={ i }
+              data-testid="filter"
+            >
               <span
                 key={ i }
               >
@@ -93,12 +96,10 @@ const NumberFilter = () => {
               <button
                 key={ i }
                 value={ filters.column }
-                data-testid="filter"
                 type="button"
                 onClick={ (event) => handleRemoveClick(event) }
               >
                 X
-
               </button>
             </div>
           ))
