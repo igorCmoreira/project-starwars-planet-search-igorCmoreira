@@ -19,6 +19,7 @@ const SearchBar = () => {
       type="text"
       value={ filterByName.name }
       onChange={ handleChange }
+      placeholder="Search"
     />
   );
 };
