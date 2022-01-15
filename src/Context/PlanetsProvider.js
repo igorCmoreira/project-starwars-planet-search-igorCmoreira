@@ -10,10 +10,33 @@ const PlanetsProvider = ({ children }) => {
   const [initialValue, setInitialValue] = useState(0);
   const [filterByNumber, setParameters] = useState({ filterByNumericValues: [] });
   const [contador, setContador] = useState(0);
+  const [columnOrder, setColumnOrder] = useState('');
+  const [sorted, setSort] = useState('');
+
+  const [ordenation, setOrder] = useState({ order: { sort: 'ASC' } });
+
+  const MENOS_UM = -1;
   const url = 'https://swapi-trybe.herokuapp.com/api/planets/';
+
   useEffect(() => {
     async function API() {
       const { results } = await fetch(url).then((response) => response.json());
+
+      // Para fazer a ordenação consultei o seguinte site:
+      // https://ricardo-reis.medium.com/o-m%C3%A9todo-sort-do-array-javascript-482576734e0a#:~:text=Por%20padr%C3%A3o%2C%20o%20m%C3%A9todo%20sort,para%20determinar%20as%20suas%20ordens
+
+      results.sort((x, y) => {
+        const a = x.name.toUpperCase();
+        const b = y.name.toUpperCase();
+        // return a == b ? 0 : a > b ? 1 : -1
+        if (a === b) {
+          return 0;
+        } if (a > b) {
+          return 1;
+        }
+        return MENOS_UM;
+      });
+
       setPlanets(results);
       setIntermediario(results);
     }
@@ -49,7 +72,39 @@ const PlanetsProvider = ({ children }) => {
     } else {
       setPlanets(intermediario);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterByNumber]);
+
+  useEffect(() => {
+    const interOrder = planets;
+
+    // Para fazer a ordenação consultei o seguinte site:
+    // https://ricardo-reis.medium.com/o-m%C3%A9todo-sort-do-array-javascript-482576734e0a#:~:text=Por%20padr%C3%A3o%2C%20o%20m%C3%A9todo%20sort,para%20determinar%20as%20suas%20ordens
+
+    if (ordenation.order.sort === 'ASC') {
+      interOrder.sort((x, y) => x[ordenation.order.column] - y[ordenation.order.column]);
+      setPlanets(interOrder);
+    } else if (ordenation.order.sort === 'DESC') {
+      interOrder.sort((x, y) => y[ordenation.order.column] - x[ordenation.order.column]);
+      setPlanets(interOrder);
+    } else {
+      setPlanets(interOrder);
+    }
+  }, [ordenation]);
+
+  const handleChangeOrder = ({ target }) => {
+    const { value } = target;
+    setColumnOrder(value);
+  };
+
+  const handleClickOrder = ({ target }) => {
+    const { value } = target;
+    setSort(value);
+  };
+
+  const handleClickOrdenation = () => {
+    setOrder({ order: { column: columnOrder, sort: sorted } });
+  };
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -81,6 +136,7 @@ const PlanetsProvider = ({ children }) => {
 
   const data = {
     planets,
+    setPlanets,
     handleChange,
     handleClick,
     handleChangeSelect,
@@ -88,6 +144,9 @@ const PlanetsProvider = ({ children }) => {
     initialValue,
     filterByNumber,
     setParameters,
+    handleChangeOrder,
+    handleClickOrder,
+    handleClickOrdenation,
   };
 
   return (

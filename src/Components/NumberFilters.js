@@ -18,7 +18,6 @@ const NumberFilter = () => {
         .map((param) => columFilter.filter((fil) => fil !== param.column));
       setColumFilter(arrayParameters[0]);
     }
-    console.log(filterByNumber);
   }, [filterByNumber]);
 
   const handleRemoveClick = ({ target }) => {
