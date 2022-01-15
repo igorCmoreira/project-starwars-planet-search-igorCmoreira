@@ -81,6 +81,7 @@ const PlanetsProvider = ({ children }) => {
     handleChangeSelect,
     filterByName,
     initialValue,
+    filterByNumber,
   };
 
   return (
