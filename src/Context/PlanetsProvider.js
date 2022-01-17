@@ -76,8 +76,7 @@ const PlanetsProvider = ({ children }) => {
   }, [filterByNumber]);
 
   useEffect(() => {
-    const interOrder = planets;
-
+    const interOrder = [...planets];
     // Para fazer a ordenação consultei o seguinte site:
     // https://ricardo-reis.medium.com/o-m%C3%A9todo-sort-do-array-javascript-482576734e0a#:~:text=Por%20padr%C3%A3o%2C%20o%20m%C3%A9todo%20sort,para%20determinar%20as%20suas%20ordens
 
@@ -143,6 +142,7 @@ const PlanetsProvider = ({ children }) => {
     filterByName,
     initialValue,
     filterByNumber,
+    ordenation,
     setParameters,
     handleChangeOrder,
     handleClickOrder,
